@@ -19,6 +19,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login"></activity>
@@ -35,6 +36,11 @@
 
         <service
             android:name=".LocationUpdater"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".BusmateNetClient"
             android:enabled="true"
             android:exported="true" />
 

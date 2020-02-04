@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.saveetha.busmate2.ui.login.LoginActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     /*
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         });
 */
 
-        startActivity(new Intent(this, MapsActivity.class));
+        startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 
