@@ -9,22 +9,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.saveetha.busmate2.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
-
     /*
     Button loginButton;
     EditText username, password ;
     TextView result;
 
 */
+    PasswordManager pm ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getPermissions();
+        pm = new PasswordManager(this);
+        if(!pm.verifyPassword()){
+            //start login activity
+            startActivity(new Intent(this,LoginActivity.class));
+            finish();
+        }
+        else {
+            startActivity(new Intent(this, MapsActivity.class));
+            finish();
+        }
 
         /*
         username = findViewById(R.id.usernameEditText);
@@ -74,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
         });
 */
 
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
     }
 
     private void getPermissions() {
