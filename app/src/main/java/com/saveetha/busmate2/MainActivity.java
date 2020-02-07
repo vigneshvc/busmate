@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getPermissions();
         pm = new PasswordManager(this);
+        startActivity(new Intent(this, MapsActivity.class));
         if(!pm.verifyPassword()){
             //start login activity
             startActivity(new Intent(this,LoginActivity.class));

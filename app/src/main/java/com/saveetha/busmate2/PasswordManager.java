@@ -15,12 +15,10 @@ import java.util.Map;
 
 public class PasswordManager {
 
-
-
-
     public static final String SHARED_PREFERENCE_ID = "BusmatePref";
     private static final String USERNAME_KEY = "username";
     private final String PASSWORD_KEY="password";
+
     SharedPreferences sp;
     SharedPreferences.Editor speditor;
     Context context;
@@ -49,7 +47,6 @@ public class PasswordManager {
         return getPassword().equals(username);
     }
     Boolean isLogged;
-
     Boolean verifyPassword(){
 
         if(!isLoggedIn()){
