@@ -59,8 +59,7 @@ public class LocationUpdater extends Service implements LocationListener {
             cal.add(Calendar.DATE, 1);
         }
 
-
-        Log.i("MainActivity", cal.toString());
+        //Log.i("MainActivity", cal.toString());
         /* Setting alarm for every time interval from the current time.*/
         int intervalTimeMillis = 1000 * 24; // time interval for updating location
         //alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,                cal.getTimeInMillis(), ,                alarmIntent);
@@ -173,7 +172,6 @@ public class LocationUpdater extends Service implements LocationListener {
         intent.putExtra("LAT", Double.toString(location.getLatitude()));
         intent.putExtra("LONG", Double.toString(location.getLongitude()));
         startService(intent);
-
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR, 5);
         cal.set(Calendar.MINUTE, 40);
@@ -221,6 +219,4 @@ public class LocationUpdater extends Service implements LocationListener {
         startLocationUpdate();
         super.onDestroy();
     }
-
-
 }

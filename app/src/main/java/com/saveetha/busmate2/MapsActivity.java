@@ -1,5 +1,6 @@
 package com.saveetha.busmate2;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,6 +44,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Handler handler;
     private GoogleMap mMap;
     FloatingActionButton recentre;
+    Button logoutButton;
+
+    PasswordManager pm ;
+    int busid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        logoutButton = findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(this);
+        pm  = new PasswordManager(this);
+        busid = pm.getPreferedBusId();
     }
 
 
@@ -60,7 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onStart() {
         super.onStart();
         recentre = findViewById(R.id.MoveToMarker);
-
+        recentre.setOnClickListener(this);
     }
 
 
@@ -84,12 +93,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     JSONObject jb = new JSONObject(response);
                                     String latt = jb.getString("lat");
                                     String longg = jb.getString("long");
+                                    String busname = jb.getString("busname");
                                     location = new LatLng(Double.parseDouble(latt), Double.parseDouble(longg));
                                     //mk = mMap.addMarker(new MarkerOptions().position(location).title("BUS").icon(BitmapDescriptorFactory.fromResource(R.drawable.busimage)));
 
                                     Log.i(TAG,location.toString());
 
                                     animateMarker(mk, location, false);
+                                    mk.setTitle(busname);
+                          //          mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
                                 } catch (Exception e) {
                                     Log.e(TAG, e.toString());
                                 }
@@ -104,7 +116,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     protected Map<String, String> getParams() {
                         Map<String, String> params = new HashMap<String, String>();
-                        params.put("busid","1");
+                        params.put("busid",busid+"");
                         return params;
                     }
                 };
@@ -113,7 +125,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 queue.add(stringRequest);
                 handler.postDelayed(this, 5000);
             }
-        }, 5000);
+        }, 8000);
     }
 
     public void animateMarker(final Marker marker, final LatLng toPosition, final boolean hideMarker) {
@@ -168,9 +180,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onClick(View v) {
-        Log.i(TAG,v.getId()+"");
+        Log.i(TAG,v.getId()+" is pressed");
         if(v.getId()==R.id.MoveToMarker){
             mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+        }
+        if(v.getId() == R.id.logoutButton){
+            new PasswordManager(this).resetAll();
+            startActivity(new Intent(this,MainActivity.class));
+            finish();
         }
     }
 }

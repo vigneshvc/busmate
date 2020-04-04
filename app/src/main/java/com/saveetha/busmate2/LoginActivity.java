@@ -21,7 +21,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login2);
         pm = new PasswordManager(this);
         if(pm.isLoggedIn()){
-            startActivity(new Intent(this,MapsActivity.class));
+            startActivity(new Intent(this,LoginActivity.class));
             finish();
         }
         username = findViewById(R.id.usernameEditText);
@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 password.setError("Empty");
             }else{
                 if(pm.login(usernameText,passwordText)){
-                    startActivity(new Intent(this,MapsActivity.class));
+                    startActivity(new Intent(this,MainActivity.class));
                     finish();
                 }else{
                     username.setError("");

@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +18,9 @@ import java.util.Map;
 public class BusmateNetClient extends Service implements Response.Listener, Response.ErrorListener {
 
     final String TAG = "BusmateNetClient";
-
-    String LAT, LONG, USERID, BUSID;
+    PasswordManager pm;
+    String LAT, LONG, USERID;
+    int BUSID;
 
     public BusmateNetClient() {
 
@@ -30,6 +29,8 @@ public class BusmateNetClient extends Service implements Response.Listener, Resp
     @Override
     public void onCreate() {
         super.onCreate();
+        pm = new PasswordManager(this);
+        if(!pm.isLoggedIn())stopSelf();
     }
 
     @Override
@@ -37,10 +38,18 @@ public class BusmateNetClient extends Service implements Response.Listener, Resp
 
         SharedPreferences sp = getSharedPreferences("MyPref", MODE_PRIVATE);
 
-        LAT = intent.getExtras().getString("LAT");
-        LONG = intent.getExtras().getString("LONG");
-        USERID = sp.getString("USERID", "-1");
-        BUSID = sp.getString("BUSID", "-1");
+        try {
+            LAT = intent.getExtras().getString("LAT");
+            LONG = intent.getExtras().getString("LONG");
+        }
+        catch(Exception e){
+            LAT = "0";
+            LONG = "0";
+        }
+        //USERID = sp.getString("USERID", "-1");
+        //BUSID = sp.getString("BUSID", "-1");
+        USERID = pm.getUserName();
+        BUSID = pm.getPreferedBusId();
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getResources().getString(R.string.server_address) + "?lat=" + LAT + "&long=" + LONG + "&USERID=" + USERID + "&BUSID=" + BUSID;
         Log.i("URL", url);
@@ -51,11 +60,11 @@ public class BusmateNetClient extends Service implements Response.Listener, Resp
                 params.put("lat", LAT);
                 params.put("long", LONG);
                 params.put("userid", USERID);
-                params.put("busid", BUSID);
-
+                params.put("busid", BUSID+"");
                 return params;
             }
         };
+
         Long lastUpdated = sp.getLong("lastupdated", 0);
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.SECOND, -5);
