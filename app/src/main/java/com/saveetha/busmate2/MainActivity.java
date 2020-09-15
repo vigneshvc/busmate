@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             finish();
         }
         if(v.getId() == R.id.missedButton){
-
+            startActivity(new Intent(this,Main2Activity.class));
         }
         if(v.getId() == R.id.outsideButton){
 stopService(new Intent(this, LocationUpdater.class));
